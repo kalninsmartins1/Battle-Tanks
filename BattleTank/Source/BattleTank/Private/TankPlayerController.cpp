@@ -6,19 +6,17 @@
 
 void ATankPlayerController::BeginPlay()
 {
-	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Begin play"));
+	Super::BeginPlay();	
 
 	auto Tank = GetPlayerTank();
 	if (Tank != nullptr)
 	{
 		const FString& TankName = Tank->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Tank found %s"), *TankName);
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Player tank found %s"), *TankName);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Tank not found !"));
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Player tank not found !"));
 	}
 }
 
