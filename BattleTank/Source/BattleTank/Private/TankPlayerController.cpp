@@ -20,6 +20,21 @@ void ATankPlayerController::BeginPlay()
 	}
 }
 
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	AimTowardsCrosshair();
+}
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (GetPlayerTank() != nullptr)
+	{
+		// Cast a ray from tanks barrel trough crosshair and check if it hits
+	}
+}
+
 ATank* ATankPlayerController::GetPlayerTank() const 
 {
 	return Cast<ATank>(GetPawn());
