@@ -23,6 +23,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	bool		 GetSightRayHitLocation(FVector& OutHitLocation) const;
+	bool		 GetMaxShootLocation(FVector& OutMaxShootLocation) const;
+
 	// Start moving tank barrel so that a shot would hit world where crosshair intersects it
 	void		 AimTowardsCrosshair();
 };
