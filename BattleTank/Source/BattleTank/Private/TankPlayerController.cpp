@@ -5,6 +5,14 @@
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 
+
+ATankPlayerController::ATankPlayerController()
+	: CrosshairNormalizedLocationX(0.5f)
+	, CrosshairNormalizedLocationY(0.3333f)
+{
+
+}
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();	
@@ -40,24 +48,42 @@ void ATankPlayerController::AimTowardsCrosshair()
 	}
 }
 
+void ATankPlayerController::GetCrosshairScreenPosition(FVector2D& OutScreenPosition) const
+{
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	
+	OutScreenPosition = FVector2D(ViewportSizeX * CrosshairNormalizedLocationX,
+		ViewportSizeY * CrosshairNormalizedLocationY);
+}
+
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {	
-	FVector MaxShootLocation;
-	GetMaxShootLocation(MaxShootLocation);
+	// Find the crosshair position
+	FVector2D CrossHairScreenLocation;
+	GetCrosshairScreenPosition(CrossHairScreenLocation);
+
+	FVector CrosshairWorldLocation;
+	FVector CrosshairWorldDirection;
+	DeprojectScreenPositionToWorld(CrossHairScreenLocation.X, CrossHairScreenLocation.Y,
+		CrosshairWorldLocation, CrosshairWorldDirection);
+
+	// "De-project" the screen position of the crosshair to a world direction
+	// Line-trace along that lok direction, and see waht we hit ()up to max range
 
 	// Perform a line trace
-	FHitResult Hit;
-	GetWorld()->LineTraceSingleByObjectType(
-		Hit,
-		GetPlayerTank()->GetActorLocation(),
-		MaxShootLocation,
-		FCollisionObjectQueryParams(
-			ECollisionChannel::ECC_PhysicsBody),
-		FCollisionQueryParams(FName(TEXT("")), false, GetPlayerTank()));
+// 	FHitResult Hit;
+// 	GetWorld()->LineTraceSingleByObjectType(
+// 		Hit,
+// 		GetPlayerTank()->GetActorLocation(),
+// 		CrosshairWorldLocation,
+// 		FCollisionObjectQueryParams(
+// 			ECollisionChannel::ECC_PhysicsBody),
+// 		FCollisionQueryParams(FName(TEXT("")), false, GetPlayerTank()));
 
-	OutHitLocation = Hit.Location;
+	OutHitLocation = CrosshairWorldLocation;
 
-	return Hit.Actor != nullptr;
+	return true;//Hit.Actor != nullptr;
 }
 
 bool ATankPlayerController::GetMaxShootLocation(FVector& OutMaxShootLocation) const
