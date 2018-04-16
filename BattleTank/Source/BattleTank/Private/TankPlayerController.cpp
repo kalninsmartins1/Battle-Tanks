@@ -63,37 +63,29 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	FVector2D CrossHairScreenLocation;
 	GetCrosshairScreenPosition(CrossHairScreenLocation);
 
-	FVector CrosshairWorldLocation;
-	FVector CrosshairWorldDirection;
-	DeprojectScreenPositionToWorld(CrossHairScreenLocation.X, CrossHairScreenLocation.Y,
-		CrosshairWorldLocation, CrosshairWorldDirection);
-
 	// "De-project" the screen position of the crosshair to a world direction
+	FVector LookDirection;
+	GetLookDirection(CrossHairScreenLocation, LookDirection);
+
 	// Line-trace along that lok direction, and see waht we hit ()up to max range
+	FVector MaxShootLocation;
+	GetMaxShootLocation(LookDirection, MaxShootLocation);
+	
+	FHitResult Hit;
+	GetWorld()->LineTraceSingleByChannel(
+		Hit,
+		GetPlayerTank()->GetActorLocation(),
+		MaxShootLocation, 
+		ECC_Destructible
+		);
 
-	// Perform a line trace
-// 	FHitResult Hit;
-// 	GetWorld()->LineTraceSingleByObjectType(
-// 		Hit,
-// 		GetPlayerTank()->GetActorLocation(),
-// 		CrosshairWorldLocation,
-// 		FCollisionObjectQueryParams(
-// 			ECollisionChannel::ECC_PhysicsBody),
-// 		FCollisionQueryParams(FName(TEXT("")), false, GetPlayerTank()));
-
-	OutHitLocation = CrosshairWorldLocation;
+	OutHitLocation = Hit.Location;
 
 	return true;//Hit.Actor != nullptr;
 }
 
-bool ATankPlayerController::GetMaxShootLocation(FVector& OutMaxShootLocation) const
+bool ATankPlayerController::GetMaxShootLocation(const FVector& LookDirection, FVector& OutMaxShootLocation) const
 {
-	// Get view point rotation and player location
-	FVector OutPlayerLocation;
-	FRotator OutViewPointRotation;
-	GetPlayerViewPoint(OutPlayerLocation,
-		OutViewPointRotation);
-
 	// Get tank shoot range
 	float ShootRange = 0;
 	ATank* Tank = GetPlayerTank();
@@ -101,9 +93,17 @@ bool ATankPlayerController::GetMaxShootLocation(FVector& OutMaxShootLocation) co
 	{
 		ShootRange = Tank->GetShootRange();
 	}
-	OutMaxShootLocation = OutPlayerLocation + OutViewPointRotation.Vector() * ShootRange;
+	OutMaxShootLocation = GetPlayerTank()->GetActorLocation() + LookDirection * ShootRange;
 
 	return Tank != nullptr;
+}
+
+bool ATankPlayerController::GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const
+{
+	FVector CameraWorldLocation; // Not used
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y,
+		CameraWorldLocation, 
+		OutLookDirection); // From camera to crosshair
 }
 
 ATank* ATankPlayerController::GetPlayerTank() const 

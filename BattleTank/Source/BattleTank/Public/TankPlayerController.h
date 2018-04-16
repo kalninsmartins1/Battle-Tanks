@@ -27,7 +27,8 @@ public:
 
 private:
 	bool		 GetSightRayHitLocation(FVector& OutHitLocation) const;
-	bool		 GetMaxShootLocation(FVector& OutMaxShootLocation) const;
+	bool		 GetMaxShootLocation(const FVector& LookDirection, FVector& OutMaxShootLocation) const;
+	bool		 GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const;
 	void		 GetCrosshairScreenPosition(FVector2D& OutScreenPosition) const;
 
 	// Start moving tank barrel so that a shot would hit world where crosshair intersects it
