@@ -5,10 +5,9 @@
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 
-
 ATankPlayerController::ATankPlayerController()
 	: CrosshairNormalizedLocationX(0.5f)
-	, CrosshairNormalizedLocationY(0.3333f)
+	, CrosshairNormalizedLocationY(0.25f)
 {
 
 }
@@ -44,7 +43,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 		FVector OutHitLocation;
 
 		GetSightRayHitLocation(OutHitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Current hit location: %s"), *OutHitLocation.ToString());		
+		UE_LOG(LogTemp, Warning, TEXT("Current hit location: %s"), *OutHitLocation.ToString());				
 	}
 }
 
@@ -57,6 +56,26 @@ void ATankPlayerController::GetCrosshairScreenPosition(FVector2D& OutScreenPosit
 		ViewportSizeY * CrosshairNormalizedLocationY);
 }
 
+bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirection, FVector& OutHitLocation) const
+{	
+	const FVector& RayStart = PlayerCameraManager->GetCameraLocation();
+	FVector RayEnd;
+	bool bIsSuccessful = GetMaxShootLocation(LookDirection, RayEnd);
+
+	FHitResult Hit;	
+	if (bIsSuccessful)
+	{
+		bIsSuccessful = GetWorld()->LineTraceSingleByChannel(Hit, RayStart, RayEnd, ECC_Visibility); // Hit everything that is visible
+		OutHitLocation = Hit.Location;
+	}
+	else
+	{
+		OutHitLocation = FVector::ZeroVector;
+	}
+
+	return bIsSuccessful;
+}
+
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {	
 	// Find the crosshair position
@@ -65,23 +84,18 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 	// "De-project" the screen position of the crosshair to a world direction
 	FVector LookDirection;
-	GetLookDirection(CrossHairScreenLocation, LookDirection);
-
-	// Line-trace along that lok direction, and see waht we hit ()up to max range
-	FVector MaxShootLocation;
-	GetMaxShootLocation(LookDirection, MaxShootLocation);
+	bool bIsSuccessful = GetLookDirection(CrossHairScreenLocation, LookDirection);
+	if (bIsSuccessful)
+	{		
+		// Line-trace along that look direction, and see what we hit up to max range
+		bIsSuccessful = GetLookVectorHitLocation(LookDirection, OutHitLocation);
+	}
+	else
+	{
+		OutHitLocation = FVector::ZeroVector;
+	}
 	
-	FHitResult Hit;
-	GetWorld()->LineTraceSingleByChannel(
-		Hit,
-		GetPlayerTank()->GetActorLocation(),
-		MaxShootLocation, 
-		ECC_Destructible
-		);
-
-	OutHitLocation = Hit.Location;
-
-	return true;//Hit.Actor != nullptr;
+	return bIsSuccessful;
 }
 
 bool ATankPlayerController::GetMaxShootLocation(const FVector& LookDirection, FVector& OutMaxShootLocation) const
@@ -93,14 +107,18 @@ bool ATankPlayerController::GetMaxShootLocation(const FVector& LookDirection, FV
 	{
 		ShootRange = Tank->GetShootRange();
 	}
-	OutMaxShootLocation = GetPlayerTank()->GetActorLocation() + LookDirection * ShootRange;
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("GetMaxShootLocation() Tank not found !"));
+	}
+	OutMaxShootLocation = PlayerCameraManager->GetCameraLocation() + LookDirection * ShootRange;
 
 	return Tank != nullptr;
 }
 
 bool ATankPlayerController::GetLookDirection(const FVector2D& ScreenLocation, FVector& OutLookDirection) const
-{
-	FVector CameraWorldLocation; // Not used
+{	
+	FVector CameraWorldLocation; // Not used here 
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y,
 		CameraWorldLocation, 
 		OutLookDirection); // From camera to crosshair
