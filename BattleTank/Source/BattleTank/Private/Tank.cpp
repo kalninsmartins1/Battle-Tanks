@@ -38,3 +38,9 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ATank::AimAt(const FVector& WorldLocation)
+{
+	const FString& CurTankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s aiming at %s"), *CurTankName, *WorldLocation.ToString());
+}
+

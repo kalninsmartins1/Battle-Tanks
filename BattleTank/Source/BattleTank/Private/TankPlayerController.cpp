@@ -40,10 +40,10 @@ void ATankPlayerController::AimTowardsCrosshair()
 	if (GetPlayerTank() != nullptr)
 	{
 		// Cast a ray from tanks barrel trough crosshair and check if it hits
-		FVector OutHitLocation;
+		FVector HitLocation;
 
-		GetSightRayHitLocation(OutHitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Current hit location: %s"), *OutHitLocation.ToString());				
+		GetSightRayHitLocation(HitLocation);
+		GetPlayerTank()->AimAt(HitLocation);
 	}
 }
 

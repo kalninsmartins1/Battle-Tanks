@@ -15,10 +15,6 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
 	float		 GetShootRange() const;
 	
@@ -27,8 +23,13 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void		 AimAt(const FVector& WorldLocation);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere)
-	float ShootRange;	
+	float ShootRange;
 };
