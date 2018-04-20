@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+class UTankAimingComponent;
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -32,4 +34,6 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	float ShootRange;
+
+	UTankAimingComponent* AimingComponent;
 };
