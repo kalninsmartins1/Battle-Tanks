@@ -20,6 +20,9 @@ public:
 public:	
 	float		 GetShootRange() const;
 	
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void		 SetBarrelComponent(UStaticMeshComponent* BarrelComponent);
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

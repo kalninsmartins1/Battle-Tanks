@@ -11,6 +11,10 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Tank aiming component"));
+	if (AimingComponent == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error something went siriously wrong and aiming component failed to create !"));
+	}
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +27,11 @@ void ATank::BeginPlay()
 float ATank::GetShootRange() const
 {
 	return ShootRange;
+}
+
+void ATank::SetBarrelComponent(UStaticMeshComponent* BarrelComponent)
+{
+	AimingComponent->SetBarrelComponent(BarrelComponent);
 }
 
 // Called every frame

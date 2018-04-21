@@ -10,9 +10,12 @@ UTankAimingComponent::UTankAimingComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
+void UTankAimingComponent::SetBarrelComponent(UStaticMeshComponent* BarrelComponent)
+{
+	this->BarrelComponent = BarrelComponent;
+}
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
@@ -35,10 +38,14 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UTankAimingComponent::AimAt(const FVector& WorldLocation)
 {
 	AActor* Owner = GetOwner();
-	if (Owner != nullptr)
+	if (Owner != nullptr && BarrelComponent != nullptr)
 	{
 		const FString& CurTankName = Owner->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Tank %s aiming at %s"), *CurTankName, *WorldLocation.ToString());
-	}	
+		const FVector& BarrelLocation = BarrelComponent->GetComponentLocation();
+		UE_LOG(LogTemp, Warning, TEXT("Tank %s aiming at %s from %s"), 
+			*CurTankName, 
+			*WorldLocation.ToString(), 
+			*BarrelLocation.ToString());
+	}
 }
 
