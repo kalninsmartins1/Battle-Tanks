@@ -22,7 +22,7 @@ public:
 
 	// Called every frame
 	virtual void  TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void		  AimAt(const FVector& WorldLocation);
+	void		  AimAt(const FVector& WorldLocation, float ShootSpeed);
 
 protected:
 	// Called when the game starts

@@ -35,8 +35,11 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = Shoot)
 	float ShootRange;
+
+	UPROPERTY(EditAnywhere, Category = Shoot)
+	float ShootSpeed;
 
 	UTankAimingComponent* AimingComponent;
 };
