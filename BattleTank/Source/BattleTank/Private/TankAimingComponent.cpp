@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
-
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine//Classes/Components/StaticMeshComponent.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -36,11 +37,21 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 }
 
 void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
-{
-	AActor* Owner = GetOwner();
-	if (Owner != nullptr && BarrelComponent != nullptr)
+{	
+	if (BarrelComponent != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Shoot speed %f"), ShootSpeed);
+		const FVector StartLocation = BarrelComponent->GetSocketLocation(FName("Projectile"));
+		
+		FVector OutShootDirection;
+		if (UGameplayStatics::SuggestProjectileVelocity(this, OutShootDirection, StartLocation, WorldLocation, ShootSpeed, false))
+		{
+			OutShootDirection.Normalize();
+			UE_LOG(LogTemp, Warning, TEXT("Shoot direction %s"), *OutShootDirection.ToString());
+		}
+		else
+		{
+			// Do nothing, no solution found
+		}
 	}
 }
 
