@@ -2,38 +2,30 @@
 
 #include "TankAimingComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Runtime/Engine//Classes/Components/StaticMeshComponent.h"
+#include "TankBarrel.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankAimingComponent::SetBarrelComponent(UStaticMeshComponent* BarrelComponent)
+void UTankAimingComponent::SetBarrelComponent(UTankBarrel* BarrelComponent)
 {
 	this->BarrelComponent = BarrelComponent;
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
+void UTankAimingComponent::MoveBarrelTowards(const FVector& AimDirection)
 {
-	Super::BeginPlay();
+	// Get angle between shoot direction and barrel current direction
+	const FRotator& BarrelRotation = BarrelComponent->GetForwardVector().Rotation();
+	const FRotator& AimDirectionRotation = AimDirection.Rotation();
+	const FRotator& DeltaRotation = AimDirectionRotation - BarrelRotation;
 
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	// Rotate the barrel by the found angle
+	BarrelComponent->Elevate(5.0f); // Magic number needs replacing
 }
 
 void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
@@ -46,11 +38,7 @@ void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
 		if (UGameplayStatics::SuggestProjectileVelocity(this, OutShootDirection, StartLocation, WorldLocation, ShootSpeed, false))
 		{
 			OutShootDirection.Normalize();
-			UE_LOG(LogTemp, Warning, TEXT("Shoot direction %s"), *OutShootDirection.ToString());
-		}
-		else
-		{
-			// Do nothing, no solution found
+			MoveBarrelTowards(OutShootDirection);
 		}
 	}
 }

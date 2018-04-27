@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
+class UTankBarrel;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -21,7 +22,7 @@ public:
 	float		 GetShootRange() const;
 	
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void		 SetBarrelComponent(UStaticMeshComponent* BarrelComponent);
+	void		 SetBarrelComponent(UTankBarrel* BarrelComponent);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

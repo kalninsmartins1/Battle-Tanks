@@ -30,8 +30,8 @@ float ATank::GetShootRange() const
 	return ShootRange;
 }
 
-void ATank::SetBarrelComponent(UStaticMeshComponent* BarrelComponent)
-{
+void ATank::SetBarrelComponent(UTankBarrel* BarrelComponent)
+{	
 	AimingComponent->SetBarrelComponent(BarrelComponent);
 }
 
