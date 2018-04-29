@@ -19,7 +19,8 @@ public:
 	
 
 public:
-	void	Elevate(float DegreesPerSecond);
+	// Relative degrees from -1 to 1
+	void	Elevate(float RelativeDegreesPerSecond);
 	
 private:
 	UPROPERTY(EditAnywhere, Category = Setup)

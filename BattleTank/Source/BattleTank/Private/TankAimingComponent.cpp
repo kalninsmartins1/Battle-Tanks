@@ -35,10 +35,18 @@ void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
 		const FVector StartLocation = BarrelComponent->GetSocketLocation(FName("Projectile"));
 		
 		FVector OutShootDirection;
-		if (UGameplayStatics::SuggestProjectileVelocity(this, OutShootDirection, StartLocation, WorldLocation, ShootSpeed, false))
+		float Time = GetWorld()->GetTimeSeconds();
+		if (UGameplayStatics::SuggestProjectileVelocity(this, OutShootDirection, StartLocation,
+				WorldLocation, ShootSpeed, false, 0.0f, 0.0f,
+				ESuggestProjVelocityTraceOption::DoNotTrace)) // Need to provide these default values for function to work properly
 		{
 			OutShootDirection.Normalize();
 			MoveBarrelTowards(OutShootDirection);
+			UE_LOG(LogTemp, Warning, TEXT("Time: %f, Solution found !"), Time);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Time: %f, Solution not found !"), Time);
 		}
 	}
 }

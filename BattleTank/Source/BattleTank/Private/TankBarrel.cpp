@@ -11,7 +11,7 @@ UTankBarrel::UTankBarrel()
 
 }
 
-void UTankBarrel::Elevate(float DegreesPerSecond)
+void UTankBarrel::Elevate(float RelativeDegreesPerSecond)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Elevating Barrel at %f speed"), DegreesPerSecond);
+	
 }
