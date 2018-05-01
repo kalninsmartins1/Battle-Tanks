@@ -25,7 +25,7 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector& AimDirection)
 	const FRotator& DeltaRotation = AimDirectionRotation - BarrelRotation;
 
 	// Rotate the barrel by the found angle
-	BarrelComponent->Elevate(5.0f); // Magic number needs replacing
+	BarrelComponent->Elevate(DeltaRotation.Pitch);
 }
 
 void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
@@ -42,11 +42,6 @@ void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
 		{
 			OutShootDirection.Normalize();
 			MoveBarrelTowards(OutShootDirection);
-			UE_LOG(LogTemp, Warning, TEXT("Time: %f, Solution found !"), Time);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Time: %f, Solution not found !"), Time);
 		}
 	}
 }
