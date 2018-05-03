@@ -16,7 +16,6 @@ class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 	
 public:
 	UTankBarrel();
-	
 
 public:
 	// Relative degrees from -1 to 1

@@ -8,6 +8,7 @@
 
 class UTankAimingComponent;
 class UTankBarrel;
+class UTankTurret;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -23,6 +24,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void		 SetBarrelComponent(UTankBarrel* BarrelComponent);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void		 SetTurretComponent(UTankTurret* TurretComponent);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

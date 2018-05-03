@@ -14,14 +14,14 @@ UTankBarrel::UTankBarrel()
 void UTankBarrel::Elevate(float RelativeDegreesPerSecond)
 {
 	// Clamp relative speed
-	RelativeDegreesPerSecond = FMath::Clamp(RelativeDegreesPerSecond, -1.0f, 1.0f);
+	RelativeDegreesPerSecond = FMath::Clamp(RelativeDegreesPerSecond, -1.0f, 1.0f);	
 
 	// Get step
 	float DeltaTime = GetWorld()->DeltaTimeSeconds;
-	float RelativeDegreesStep = RelativeDegreesPerSecond * MaxElevationAngle * DeltaTime;
+	float RelativeElevationStep = RelativeDegreesPerSecond * MaxElevationAngle * DeltaTime;	
 
 	// Set the rotation
-	float NewElevation = FMath::Clamp(RelativeRotation.Pitch + RelativeDegreesStep, MinElevationAngle, MaxElevationAngle);	
-	UE_LOG(LogTemp, Warning, TEXT("TankBarrel: ElevationRelativeDegrees %f !"), DeltaTime, RelativeDegreesStep);
-	SetRelativeRotation(FRotator(NewElevation, 0.0f, 0.0f));
+	float NewRotation = FMath::Clamp(RelativeRotation.Pitch + RelativeElevationStep, MinElevationAngle, MaxElevationAngle);
+	UE_LOG(LogTemp, Warning, TEXT("TankBarrel: NewPitch %f !"), NewRotation);
+	SetRelativeRotation(FRotator(NewRotation, 0.0f, 0.0f));
 }

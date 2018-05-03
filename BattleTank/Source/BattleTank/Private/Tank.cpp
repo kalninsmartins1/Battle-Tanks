@@ -35,6 +35,11 @@ void ATank::SetBarrelComponent(UTankBarrel* BarrelComponent)
 	AimingComponent->SetBarrelComponent(BarrelComponent);
 }
 
+void ATank::SetTurretComponent(UTankTurret* TurretComponent)
+{
+	AimingComponent->SetTurretComponent(TurretComponent);
+}
+
 // Called every frame
 void ATank::Tick(float DeltaTime)
 {
