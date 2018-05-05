@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void		 SetTurretComponent(UTankTurret* TurretComponent);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void		 Fire();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

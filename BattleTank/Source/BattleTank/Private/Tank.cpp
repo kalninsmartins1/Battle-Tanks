@@ -40,6 +40,12 @@ void ATank::SetTurretComponent(UTankTurret* TurretComponent)
 	AimingComponent->SetTurretComponent(TurretComponent);
 }
 
+void ATank::Fire()
+{
+	const FString& TankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s firing !"), *TankName);
+}
+
 // Called every frame
 void ATank::Tick(float DeltaTime)
 {
