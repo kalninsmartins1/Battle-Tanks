@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "Projectile.h"
 
 // Sets default values
 ATank::ATank()
@@ -31,7 +32,8 @@ float ATank::GetShootRange() const
 }
 
 void ATank::SetBarrelComponent(UTankBarrel* BarrelComponent)
-{	
+{
+	Barrel = BarrelComponent;
 	AimingComponent->SetBarrelComponent(BarrelComponent);
 }
 
@@ -44,6 +46,13 @@ void ATank::Fire()
 {
 	const FString& TankName = GetName();
 	UE_LOG(LogTemp, Warning, TEXT("Tank %s firing !"), *TankName);
+
+	if (Barrel != nullptr)
+	{
+		FVector StartLocation;
+		AimingComponent->GetShootingStartLocation(StartLocation);
+		GetWorld()->SpawnActor<AProjectile>(BlueprintProjectile, StartLocation, FRotator(0,0,0));
+	}
 }
 
 // Called every frame

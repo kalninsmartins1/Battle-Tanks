@@ -9,6 +9,7 @@
 class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -49,5 +50,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Shoot)
 	float ShootSpeed;
 
-	UTankAimingComponent* AimingComponent;
+	UPROPERTY(EditAnywhere, Category = Setup)
+	TSubclassOf<AProjectile> BlueprintProjectile;
+
+	UTankBarrel*			Barrel;
+	UTankAimingComponent*	AimingComponent;
 };

@@ -19,6 +19,8 @@ public:
 	UTankAimingComponent();
 
 public:
+	void GetShootingStartLocation(FVector& OutStartLocation) const;
+
 	void SetBarrelComponent(UTankBarrel* BarrelComponent);
 	void SetTurretComponent(UTankTurret* TurretComponent);
 

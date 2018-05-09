@@ -13,6 +13,11 @@ UTankAimingComponent::UTankAimingComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void UTankAimingComponent::GetShootingStartLocation(FVector& OutStartLocation) const
+{
+	OutStartLocation = BarrelComponent->GetSocketLocation(FName("Projectile"));
+}
+
 void UTankAimingComponent::SetBarrelComponent(UTankBarrel* BarrelComponent)
 {
 	this->BarrelComponent = BarrelComponent;
@@ -39,8 +44,9 @@ void UTankAimingComponent::AimAt(const FVector& WorldLocation, float ShootSpeed)
 {	
 	if (BarrelComponent != nullptr)
 	{
-		const FVector StartLocation = BarrelComponent->GetSocketLocation(FName("Projectile"));
-		
+		FVector StartLocation;
+		GetShootingStartLocation(StartLocation);
+
 		FVector OutShootDirection;
 		float Time = GetWorld()->GetTimeSeconds();
 		if (UGameplayStatics::SuggestProjectileVelocity(this, OutShootDirection, StartLocation,
