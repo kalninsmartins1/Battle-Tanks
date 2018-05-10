@@ -20,6 +20,7 @@ public:
 
 public:
 	void GetShootingStartLocation(FVector& OutStartLocation) const;
+	void GetShootingStartRotation(FRotator& OutStartRotation) const;
 
 	void SetBarrelComponent(UTankBarrel* BarrelComponent);
 	void SetTurretComponent(UTankTurret* TurretComponent);
@@ -30,6 +31,7 @@ private:
 	void MoveBarrelTowards(const FVector& AimDirection);
 
 private:
+	static const FName ProjectileSocketName;
 	UTankBarrel* BarrelComponent;
 	UTankTurret* TurretComponent;
 };

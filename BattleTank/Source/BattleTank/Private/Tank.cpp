@@ -7,7 +7,7 @@
 // Sets default values
 ATank::ATank()
 	: ShootRange(1000000.0f)
-	, ShootSpeed(100000.0f)
+	, ShootSpeed(4000.0f)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -51,7 +51,11 @@ void ATank::Fire()
 	{
 		FVector StartLocation;
 		AimingComponent->GetShootingStartLocation(StartLocation);
-		GetWorld()->SpawnActor<AProjectile>(BlueprintProjectile, StartLocation, FRotator(0,0,0));
+
+		FRotator StartRotation;
+		AimingComponent->GetShootingStartRotation(StartRotation);
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(BlueprintProjectile, StartLocation, StartRotation);
+		Projectile->LaunchProjectile(ShootSpeed);
 	}
 }
 

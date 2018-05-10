@@ -5,6 +5,8 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 
+const FName UTankAimingComponent::ProjectileSocketName = "Projectile";
+
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
@@ -15,7 +17,12 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::GetShootingStartLocation(FVector& OutStartLocation) const
 {
-	OutStartLocation = BarrelComponent->GetSocketLocation(FName("Projectile"));
+	OutStartLocation = BarrelComponent->GetSocketLocation(ProjectileSocketName);
+}
+
+void UTankAimingComponent::GetShootingStartRotation(FRotator& OutStartRotation) const
+{
+	OutStartRotation = BarrelComponent->GetSocketRotation(ProjectileSocketName);
 }
 
 void UTankAimingComponent::SetBarrelComponent(UTankBarrel* BarrelComponent)
