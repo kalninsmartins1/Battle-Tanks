@@ -55,4 +55,6 @@ private:
 
 	UTankBarrel*			Barrel;
 	UTankAimingComponent*	AimingComponent;
+	float					ReloadTimeInSeconds;
+	float					LastFireTime;
 };

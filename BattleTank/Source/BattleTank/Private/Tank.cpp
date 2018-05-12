@@ -8,6 +8,8 @@
 ATank::ATank()
 	: ShootRange(1000000.0f)
 	, ShootSpeed(4000.0f)
+	, ReloadTimeInSeconds(3.0f)
+	, LastFireTime(0)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -44,10 +46,8 @@ void ATank::SetTurretComponent(UTankTurret* TurretComponent)
 
 void ATank::Fire()
 {
-	const FString& TankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Tank %s firing !"), *TankName);
-
-	if (Barrel != nullptr)
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (Barrel != nullptr && isReloaded)
 	{
 		FVector StartLocation;
 		AimingComponent->GetShootingStartLocation(StartLocation);
@@ -56,6 +56,7 @@ void ATank::Fire()
 		AimingComponent->GetShootingStartRotation(StartRotation);
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(BlueprintProjectile, StartLocation, StartRotation);
 		Projectile->LaunchProjectile(ShootSpeed);
+		LastFireTime = FPlatformTime::Seconds();
 	}
 }
 
