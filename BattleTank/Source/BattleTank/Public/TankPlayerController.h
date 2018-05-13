@@ -37,9 +37,9 @@ private:
 	void		 AimTowardsCrosshair();
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float		CrosshairNormalizedLocationX;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float		CrosshairNormalizedLocationY;
 };
