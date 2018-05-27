@@ -19,4 +19,11 @@ public:
 	// Set tank trottle between -1 and 1
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetTrottle(float value);
+
+private:
+	UTankTrack();
+
+private:
+	// Move force in Newtons
+	float MaxTankMoveForce;
 };
